@@ -1,0 +1,8 @@
+/ai/*
+
+!ai/lib/
+!ai/assets/
+!ai/android/app/src/main/AndroidManifest.xml
+!ai/Readme.txt
+!ai/pubspec.yaml
+!ai/pubspec.lock
