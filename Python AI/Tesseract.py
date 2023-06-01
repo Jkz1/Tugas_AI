@@ -2,7 +2,7 @@ from PIL import Image
 from pytesseract import pytesseract as tess
 from googletrans import Translator
 
-def translate():
+def imgtranslate():
     translator = Translator()
 
     tess.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'

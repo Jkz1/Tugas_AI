@@ -11,6 +11,13 @@ class Result extends StatefulWidget {
 
   File img;
 
+  int Status = 0;
+
+  String LangSrc = "-";
+  String LangDest = "-";
+  String OriText = "-";
+  String ResText = "-";
+
   Result({super.key, required this.img});
 
   @override
@@ -28,58 +35,6 @@ class _ResultState extends State<Result> {
   String _OriText = "-";
   String _ResText = "-";
 
-  Future uploadimg() async {
-    final request = await http.MultipartRequest("POST", Uri.parse('http://192.168.1.4:2000/uploadimg'));
-    
-    request.files.add(http.MultipartFile('image',
-      widget.img.readAsBytes().asStream(), widget.img.lengthSync(),
-      filename: widget.img.path.split('/').last));
-
-    final headers = {"Content-type" : "multipart/form-data"};
-    
-    request.headers.addAll(headers);
-    final response = await request.send();
-    http.Response res = await http.Response.fromStream(response);
-    final decode = jsonDecode(res.body) as Map<String, dynamic>;
-    if(decode["Src"] == "-"){
-      Status = 404;
-      showDialog(
-        context: context,
-        builder: (context){
-          return AlertDialog(
-            title: const Text("Error"),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: const [
-                Text("- Q : Apa yang terjadi ?", style: TextStyle(color: Colors.grey, fontSize: 18),),
-                Text("- A : Tesseract OCR gagal mendeteksi teks dari gambar yang kamu berikan."),
-                Text("- Q : Mengapa hal itu terjadi ?", style: TextStyle(color: Colors.grey, fontSize: 18),),
-                Text("- A : Beberapa faktor, seperti kurang jelasnya gambar, menggunakan font yang berbeda dan lainnya. Namun saya tetap sulit mengatakan ini kesalahan user karena ini murni kecacatan Tesseract."),
-                Text("- Q : Apa yang bisa saya lakukan ?", style: TextStyle(color: Colors.grey, fontSize: 18),),
-                Text("- A : Coba mengambil kembali gambar. Tesseract berjalan cukup baik dengan screenshot. Atau buat tulisan di gambar kamu sejelas screenshot.")
-              ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: (){
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                },
-                child: Text("Close"))
-            ],
-          );
-        }
-      );
-    }else{
-      Status = 200;
-      _LangSrc = decode["Src"];
-      _LangDest = decode["Dest"];
-      _OriText = decode["Text"];
-      _ResText = decode["Res"];
-    }
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,7 +49,6 @@ class _ResultState extends State<Result> {
             children: [
               Image.file(widget.img),
               if(Status == 200) Success(LangDest: _LangDest, LangSrc: _LangSrc, OriText: _OriText, ResText: _ResText),
-              ElevatedButton(onPressed: uploadimg, child: Text("Upload")),
             ],
           ),
         ),
