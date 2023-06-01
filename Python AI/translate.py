@@ -9,8 +9,3 @@ def texttrans(txt, idest = 'en'):
         'LangDest' : res.dest,
         'ResText' : res.text
     }
-
-
-text = input("Input Text")
-
-print (texttrans(text))

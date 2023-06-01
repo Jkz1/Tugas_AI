@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:ai/opencam.dart';
+import 'package:ai/home.dart';
 import 'package:ai/provider/providers.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: OpenCam(),
+      home: Home(),
     );
   }
 }

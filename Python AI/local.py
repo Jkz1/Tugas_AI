@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request
 import json
-from Tesseract import imgtranslate
+from imgTrans import imgtranslate
 from translate import texttrans
 
 app = Flask(__name__)
