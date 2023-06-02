@@ -6,6 +6,7 @@ class Prov extends ChangeNotifier {
   String _oritxt = "";
   String _restxt = "";
   String _val = "";
+  String _uri = "http://192.168.1.4:2000/";
   bool _active = false;
   bool _loadstatus = false;
 
@@ -14,6 +15,7 @@ class Prov extends ChangeNotifier {
   String get oritxt => _oritxt;
   String get restxt => _restxt;
   String get val => _val;
+  String get uri => _uri;
   bool get active => _active;
   bool get loadstatus => _loadstatus;
 
@@ -21,10 +23,17 @@ class Prov extends ChangeNotifier {
     _src = val;
     notifyListeners();
   }
+
+  set seturi(val) {
+    _uri = val;
+    notifyListeners();
+  }
+
   set setloadstatus(val) {
     _loadstatus = val;
     notifyListeners();
   }
+
   set setactive(val) {
     _active = val;
     notifyListeners();

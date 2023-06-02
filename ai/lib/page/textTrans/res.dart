@@ -37,7 +37,7 @@ class _ResState extends State<Res> {
         print("empty val");
       } else {
         final request = await http.post(
-            Uri.parse('http://192.168.1.4:2000/TextTranslate'),
+            Uri.parse(prov.uri+'TextTranslate'),
             body: json.encode({'Text': prov.val, 'Lan': prov.dest}));
         final res = jsonDecode(request.body) as Map<String, dynamic>;
         prov.setdest = res["LangDest"];

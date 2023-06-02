@@ -24,8 +24,6 @@ class _SrcState extends State<Src> {
 
   bool active = false;
 
-  String debug = "bro";
-
   @override
   Widget build(BuildContext context) {
     final prov = Provider.of<Prov>(context);
@@ -36,7 +34,7 @@ class _SrcState extends State<Src> {
     Future uploadimg() async {
       prov.setloadstatus = true;
       final request = http.MultipartRequest(
-          "POST", Uri.parse('http://192.168.1.4:2000/uploadimg'));
+          "POST", Uri.parse(prov.uri+'uploadimg'));
 
       request.files.add(http.MultipartFile(
           'image', _Image!.readAsBytes().asStream(), _Image!.lengthSync(),
@@ -193,7 +191,7 @@ class _SrcState extends State<Src> {
         print("empty val");
       } else {
         final request = await http.post(
-            Uri.parse('http://192.168.1.4:2000/TextTranslate'),
+            Uri.parse(prov.uri+'TextTranslate'),
             body: json.encode({'Text': prov.val, 'Lan': prov.dest}));
         final res = jsonDecode(request.body) as Map<String, dynamic>;
         prov.setdest = res["LangDest"];
@@ -204,7 +202,6 @@ class _SrcState extends State<Src> {
 
     return Column(
       children: [
-        Text(debug),
         Container(
           width: (MediaQuery.of(context).size.width) - 20,
           height: 170,
@@ -261,6 +258,9 @@ class _SrcState extends State<Src> {
                     setState(() {
                       prov.setval = newv;
                     });
+                    if(newv == ''){
+                      prov.setrestxt = '';
+                    }
                     prov.active ? postfunc() : null;
                   },
                   controller: _txtcontroller,
