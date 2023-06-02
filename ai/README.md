@@ -10,4 +10,4 @@ How to run flutter source code.
 
 !! Note !!
 1. Aplikasi hanya bisa berjalan mulus di aplikasi android, atau emulator android
-2. Aplikasi hanya dapat berjalan ketika server local dalam keadaan aktif.
+2. Aplikasi hanya berjalan mulus ketika server local dalam keadaan aktif.
