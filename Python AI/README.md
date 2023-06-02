@@ -8,6 +8,7 @@ How to run local server on your own device.
  - pip install pytesseract
  - pip install googletrans
 4. Install aplikasi Tesseract.
-5. Ubah directory file pada Tesseract.py line-8 sesuai dengan folder install aplikasi Tesseract kamu.
+5. Pada imgTrans.py line-8 sesuai dengan folder install aplikasi Tesseract kamu.
 6. Pada local.py line-20 ganti 192.168.1.4 dengan ip laptop tempat kamu menjalankan python.
-7. Run local.py seperti biasa
+7. Buka cmd lalu arahkan sampai ke folder 'TUGAS AI'
+8. ketikkan py local.py

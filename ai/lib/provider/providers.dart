@@ -1,3 +1,4 @@
+import 'package:ai/lan.dart';
 import 'package:flutter/material.dart';
 
 class Prov extends ChangeNotifier {
@@ -20,7 +21,7 @@ class Prov extends ChangeNotifier {
   bool get loadstatus => _loadstatus;
 
   set setsrc(val) {
-    _src = val;
+    _src = lan[val]!;
     notifyListeners();
   }
 

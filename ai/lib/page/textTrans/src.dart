@@ -7,6 +7,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 
 class Src extends StatefulWidget {
   Src({super.key});
@@ -18,9 +19,13 @@ class Src extends StatefulWidget {
 class _SrcState extends State<Src> {
   final _txtcontroller = TextEditingController();
 
+  SpeechToText tools = SpeechToText();
+
   final imgPicker = ImagePicker();
 
   File? _Image;
+
+  bool onmic = false;
 
   bool active = false;
 
@@ -33,8 +38,8 @@ class _SrcState extends State<Src> {
 
     Future uploadimg() async {
       prov.setloadstatus = true;
-      final request = http.MultipartRequest(
-          "POST", Uri.parse(prov.uri+'uploadimg'));
+      final request =
+          http.MultipartRequest("POST", Uri.parse(prov.uri + 'uploadimg'));
 
       request.files.add(http.MultipartFile(
           'image', _Image!.readAsBytes().asStream(), _Image!.lengthSync(),
@@ -125,8 +130,7 @@ class _SrcState extends State<Src> {
                 ],
               ),
             );
-          }
-      );
+          });
       return croppedFile;
     }
 
@@ -190,8 +194,7 @@ class _SrcState extends State<Src> {
       if (prov.val == '') {
         print("empty val");
       } else {
-        final request = await http.post(
-            Uri.parse(prov.uri+'TextTranslate'),
+        final request = await http.post(Uri.parse(prov.uri + 'TextTranslate'),
             body: json.encode({'Text': prov.val, 'Lan': prov.dest}));
         final res = jsonDecode(request.body) as Map<String, dynamic>;
         prov.setdest = res["LangDest"];
@@ -202,6 +205,7 @@ class _SrcState extends State<Src> {
 
     return Column(
       children: [
+        SizedBox(height: 10,),
         Container(
           width: (MediaQuery.of(context).size.width) - 20,
           height: 170,
@@ -232,12 +236,22 @@ class _SrcState extends State<Src> {
                             color: Colors.grey,
                           )),
                       TextButton(
-                          onPressed: () {
-                            print("Mic Clicked");
+                          onPressed: () async {
+                            var available = await tools.initialize();
+                            if (available) {
+                              setState(() {
+                                tools.listen(onResult: (result) {
+                                  setState(() {
+                                    prov.setval = result.recognizedWords;
+                                    _txtcontroller.value = TextEditingValue(text: result.recognizedWords);
+                                  });
+                                });
+                              });
+                            }
                           },
                           child: Icon(
                             Icons.mic_rounded,
-                            color: Colors.grey,
+                            color: onmic?Colors.blue:Colors.grey,
                           )),
                     ],
                   )
@@ -258,7 +272,7 @@ class _SrcState extends State<Src> {
                     setState(() {
                       prov.setval = newv;
                     });
-                    if(newv == ''){
+                    if (newv == '') {
                       prov.setrestxt = '';
                     }
                     prov.active ? postfunc() : null;
