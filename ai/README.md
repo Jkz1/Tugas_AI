@@ -5,9 +5,9 @@ How to run flutter source code.
 3. Buka terminal, lalu ketikkan
  - flutter clean
  - flutter pub get
-4. Pada lib/result.dart line-32 ganti 192.168.1.4 dengan ip config tempat kamu menjalankan local server
+4. Pada provider.dart, ganti uri dengan ip addres tempat kamu menjalankan local server
 5. Coba jalankan.
 
 !! Note !!
-1. Aplikasi hanya bisa berjalan mulus di aplikasi android/IOS, atau emulator android/IOS
+1. Aplikasi hanya bisa berjalan mulus di aplikasi android, atau emulator android
 2. Aplikasi hanya berjalan mulus ketika server local dalam keadaan aktif.
