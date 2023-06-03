@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:speech_to_text/speech_to_text.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 
 class Src extends StatefulWidget {
   Src({super.key});
@@ -20,6 +21,7 @@ class _SrcState extends State<Src> {
   final _txtcontroller = TextEditingController();
 
   SpeechToText tools = SpeechToText();
+  FlutterTts mouth = FlutterTts();
 
   final imgPicker = ImagePicker();
 
@@ -29,9 +31,34 @@ class _SrcState extends State<Src> {
 
   bool active = false;
 
+  String mouthlang = '';
+
+  List<DropdownMenuItem<String>> dropDownLangList (){
+    List<DropdownMenuItem<String>> temp = [];
+    List<dynamic> mouthlanglist = ["en-US", "de-DE", "en-GB", "es-ES", "es-US", "fr-FR", "hi-IN", "id-ID", "it-IT", "ja-JP", "ko-KR", "nl-NL", "pl-PL", "pt-BR", "ru-RU", "zh-CN", "zh-HK", "zh-TW"];
+    mouthlanglist.forEach((element) {
+      temp.add(
+        DropdownMenuItem(
+          child: Text(element),
+          value: element,)
+      );
+    });
+    return temp;
+  }
+
+  String selectedMouthLang = 'en-US';
+
   @override
   Widget build(BuildContext context) {
     final prov = Provider.of<Prov>(context);
+
+    speak(String text)async{
+      await mouth.setLanguage(selectedMouthLang);
+      List<dynamic> listlang = await mouth.getLanguages;
+      print(listlang);
+      await mouth.setPitch(1.0);
+      await mouth.speak(text);
+    }
 
     var image;
     var newimage;
@@ -206,6 +233,23 @@ class _SrcState extends State<Src> {
     return Column(
       children: [
         SizedBox(height: 10,),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("Select Speech lang", style: TextStyle(color: Colors.grey, fontSize: 20),),
+            SizedBox(width: 10,),
+            DropdownButton(
+              value: selectedMouthLang,
+              items: dropDownLangList(),
+              style: TextStyle(color: Colors.grey, fontSize: 20),
+              onChanged: (String? newval){
+                setState(() {
+                  selectedMouthLang = newval!;
+                });
+              }
+            ),
+          ],
+        ),
         Container(
           width: (MediaQuery.of(context).size.width) - 20,
           height: 170,
@@ -227,6 +271,12 @@ class _SrcState extends State<Src> {
                   ),
                   Row(
                     children: [
+                      TextButton(
+                        onPressed: (){
+                          speak(prov.val);
+                        },
+                        child: Icon(Icons.speaker_outlined, color: Colors.grey,)
+                      ),
                       TextButton(
                           onPressed: () {
                             camfunct();
