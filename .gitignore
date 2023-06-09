@@ -1,5 +1,6 @@
 /ai/*
 
+!ai/android/app/build.gradle
 !ai/lib/
 !ai/assets/
 !ai/android/app/src/main/AndroidManifest.xml
